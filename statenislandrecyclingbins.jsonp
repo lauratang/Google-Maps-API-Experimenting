@@ -1,0 +1,509 @@
+eqfeed_callback({
+   "type": "FeatureCollection",
+   "features": [
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.100364,40.587445 ]
+    },
+    "properties": {
+    "site_type":"Subproperty",
+    "park_name":"Berry Homes ballfield",
+    "address":"Gen. Douglas Macarthur Park, Dongan Hills Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.100257,40.586439 ]
+    },
+    "properties": {
+    "site_type":"Subproperty",
+    "park_name":"Berry Homes ballfield",
+    "address":"Gen. Douglas Macarthur Park, Dongan Hills Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.116627,40.574036 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"150 St",
+    "address":"New Dorp Lane & S Railroad Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.208524,40.53514 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Bloomingdale Playgound",
+    "address":"Bloomingdale Park, Lenevar Ave & Ramona Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.210241,40.533819 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Bloomingdale Playgound",
+    "address":"Bloomingdale Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.207153,40.531521 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Bloomingdale Playgound",
+    "address":"Bloomingdale Park, Richmond Pkwy & Lenevar Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.210125,40.535174 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Bloomingdale Playgound",
+    "address":"Bloomingdale Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.10392,40.557382 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Cedar Grove Beach",
+    "address":"Cedar Grove Beach"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.10104,40.560272 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Cedar Grove Beach",
+    "address":"Cedar Grove Beach"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.118801,40.620135 ]
+    },
+    "properties": {
+    "site_type":"Indoor",
+    "park_name":"Clove lake garage complex",
+    "address":"Clove Lake Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.118278,40.618744 ]
+    },
+    "properties": {
+    "site_type":"Indoor",
+    "park_name":"Clove lake garage complex",
+    "address":"Clove Lake Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.113523,40.613891 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Cloves Lake",
+    "address":"Clove Lake Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.118791,40.637872 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Corporal Thompson Playground",
+    "address":"CPL Thompson Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.07412,40.614615 ]
+    },
+    "properties": {
+    "site_type":"Indoor",
+    "park_name":"DeMatti Playground",
+    "address":"Thompkins Ave Btwn Chestnut Ave & Shaughnessy Ln"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.135418,40.640999 ]
+    },
+    "properties": {
+    "site_type":"Indoor",
+    "park_name":"Faber Pool",
+    "address":"Faber Pool and Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.16311549,40.62005569 ]
+    },
+    "properties": {
+    "site_type":"Indoor",
+    "park_name":"Graniteville",
+    "address":"Jennifer's Playground"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.138918,40.588496 ]
+    },
+    "properties": {
+    "site_type":"Indoor",
+    "park_name":"Greenbelt Nature Center",
+    "address":"700 Rockland Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.125035,40.584516 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Greenbelt Park",
+    "address":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.135646,40.593686 ]
+    },
+    "properties": {
+    "site_type":"Indoor",
+    "park_name":"Greenbelt Rec Ctr",
+    "address":"501 Brielle Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.097531,40.564469 ]
+    },
+    "properties": {
+    "site_type":"Subproperty",
+    "park_name":"John M. D'Amato Field",
+    "address":"Miller Field"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.074802,40.637596 ]
+    },
+    "properties": {
+    "site_type":"Indoor",
+    "park_name":"Lyons Pool",
+    "address":"Tompkinsville Play Center"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.100975,40.585877 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"MacArthur Park",
+    "address":"MacArthur Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.086066,40.643368 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Mahony Playground",
+    "address":"Crescent Ave Btwn Jersey St & Beechwood Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.098706,40.575019 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Midland Beach",
+    "address":"Midland Playground"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.098663,40.57669 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Midland Beach",
+    "address":"Midland Field, Bedford Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.118013,40.628859 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Prall Playground",
+    "address":"Forest Ave & Elizabeth St"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.091985,40.627186 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Silver Lake Dog Run",
+    "address":"Silver Lake Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.099058,40.628358 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Silver Lake Tennis",
+    "address":"Silver Lake Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.077688,40.579313 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"South Beach",
+    "address":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.075724,40.642709 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Staten Island Ferry Terminal",
+    "address":"Richmond Terrace"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.075489,40.642324 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Staten Island Ferry Terminal",
+    "address":"Richmond Terrace"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.076549,40.642303 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Staten Island Ferry Terminal",
+    "address":"Hyatt Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.235477,40.505646 ]
+    },
+    "properties": {
+    "site_type":"Indoor",
+    "park_name":"Tottenville Pool",
+    "address":"Hylan Blvd"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.108845,40.643799 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Walker Park",
+    "address":"Delafield Pl & Bard Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.11032,40.642843 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Walker Park",
+    "address":"Davis Ave & Livingston Ct"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.11046,40.643449 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Walker Park",
+    "address":"Delafield Pl & Davis Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.108641,40.643343 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Walker Park",
+    "address":"Livingston Ct & bard Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.119287,40.637121 ]
+    },
+    "properties": {
+    "site_type":"Indoor",
+    "park_name":"West Brighton Pool",
+    "address":"899 Henderson Ave"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.158697,40.603832 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Willowbrook Park",
+    "address":"Willowbrook Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.16125,40.603828 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Willowbrook Park",
+    "address":"Willowbrook Park"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.190913,40.517368 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Wolfe's Pond",
+    "address":"Wolfe's Pond"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -74.18731,40.518652 ]
+    },
+    "properties": {
+    "site_type":"Outdoor",
+    "park_name":"Wolfe's Pond",
+    "address":"Wolfe's Pond"
+    }
+  }
+]
+});
