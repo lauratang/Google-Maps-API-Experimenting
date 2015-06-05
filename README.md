@@ -7,6 +7,6 @@ Fun with maps
 3. visualizing-earthquakes.html: displays one set of data for earthquakes pulled from geojsonp
 4. visualizing-earthquakes-multioption.html: displays two sets of data for earthquakes pulled from geojsonp
 5. heatmap
-6. using search/places api
+6. using search/places api [https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple]
 7. using point to point/roads/maps/travel
 6. information over time using a slider
