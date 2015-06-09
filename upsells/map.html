@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+
+    <script>
+var map;
+var markers = [];
+var mapStyle = [{
+  'featureType': 'all',
+  'elementType': 'all',
+  'stylers': [{'visibility': 'on'}]
+}, {
+  'featureType': 'landscape',
+  'elementType': 'geometry',
+  'stylers': [{'visibility': 'on'}, {'color': '#fcfcfc'}]
+}, {
+  'featureType': 'water',
+  'elementType': 'labels',
+  'stylers': [{'visibility': 'off'}]
+}, {
+  'featureType': 'water',
+  'elementType': 'geometry',
+  'stylers': [{'visibility': 'on'}, {'hue': '#5f94ff'}, {'lightness': 60}]
+}];
+
+google.maps.event.addDomListener(window, 'load', function() {
+
+  map = new google.maps.Map(document.getElementById('map-canvas'), {
+    center: { lat: 39.09024, lng: -95.712891 },
+    zoom: 4,
+    styles: mapStyle
+  });
+
+  var script = document.createElement('script');
+  script.setAttribute('src', 'data.jsonp');
+  document.getElementsByTagName('head')[0].appendChild(script);
+
+  // Clear the map
+  setAllMap(null);
+
+  // Loop through the results array and place a marker for each
+  // set of coordinates.
+  window.eqfeed_callback = function(results) {
+
+    var low = [151, 83, 34];   // color of mag 1.0
+    var high = [5, 69, 54];  // color of mag 6.0 and above
+    var minMag = 1.0;
+    var maxMag = 30.0;
+    
+    for (var i = 0; i < results.features.length; i++) {
+      var coords = results.features[i].geometry.coordinates;
+      var latLng = new google.maps.LatLng(coords[1] + ((Math.floor(Math.random() * 500) - 250)/1000),
+        coords[0] + ((Math.floor(Math.random() * 500) - 250)/1000));      
+      var fraction = (Math.min(results.features[i].properties.count, maxMag) - minMag) / (maxMag - minMag);
+      var division = results.features[i].properties.Division;
+      var color;
+      if (division == "Western") {
+        color = '#000066';
+      } else if (division == "Central") {
+        color = '#009933';
+      } else {
+        color = '#ff0000';
+      }
+      //var color = interpolateHsl(low, high, fraction);
+      
+      var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          strokeWeight: 0.5,
+          strokeColor: '#fff',
+          fillColor: color,
+          fillOpacity: 2 / results.features[i].properties.count,
+          scale: Math.pow(results.features[i].properties.count+.75, 1.75)
+        },
+        zIndex: Math.floor(results.features[i].properties.count)
+      });
+
+      var contentString = '<center><b> Market: </b>' + results.features[i].properties.City + '<br><b> Programmer: </b>' + results.features[i].properties.Programmer + '<br><b>Corp/Sysprin:</b> ' + results.features[i].properties.corp_sysprin + '<br><b>Count:</b> ' +  results.features[i].properties.count + '</center>';
+      marker.info = new google.maps.InfoWindow({
+        content: contentString
+      })
+
+      google.maps.event.addListener(marker, 'mouseover', function() {
+          this.info.open(map, this);
+        });
+
+      google.maps.event.addListener(marker, 'mouseout', function() {
+          this.info.close();
+      });
+     
+      markers.push(marker);
+    }
+  }
+
+  var westernControlDiv = document.createElement('div');
+  var westernControl = new WesternControl(westernControlDiv, map);
+  westernControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(westernControlDiv);
+
+  var centralControlDiv = document.createElement('div');
+  var centralControl = new CentralControl(centralControlDiv, map);
+  centralControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(centralControlDiv);
+
+  var neControlDiv = document.createElement('div');
+  var neControl = new NEControl(neControlDiv, map);
+  neControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(neControlDiv);
+
+  var gControlDiv = document.createElement('div');
+  var gControl = new GControl(gControlDiv, map);
+  gControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(gControlDiv);
+
+  var cmControlDiv = document.createElement('div');
+  var cmControl = new CMControl(cmControlDiv, map);
+  cmControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(cmControlDiv);
+
+  var disneyControlDiv = document.createElement('div');
+  var disneyControl = new DisneyControl(disneyControlDiv, map);
+  disneyControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(disneyControlDiv);
+
+  var centerControlDiv = document.createElement('div');
+  var centerControl = new CenterControl(centerControlDiv, map);
+  centerControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+});
+
+function WesternControl(controlDiv, map) {
+
+  // Set CSS for the control border
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = '#000066';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Western Markets';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior
+  var controlText = document.createElement('div');
+  controlText.style.color = '#fff';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Western';
+  controlUI.appendChild(controlText);
+
+  google.maps.event.addDomListener(controlUI, 'click', function() {
+
+    map.setZoom(5);
+    map.setCenter({
+      lat: 39.09024,
+      lng: -100.712891
+    });
+
+    // Create a <script> tag and set the USGS URL as the source.
+    var script = document.createElement('script');
+    script.setAttribute('src','data.jsonp');
+    document.getElementsByTagName('head')[0].appendChild(script);
+
+    // Clear the map
+    setAllMap(null);
+    markers = [];
+    
+    // Loop through the results array and place a marker for each
+    // set of coordinates.
+    window.eqfeed_callback = function(results) {
+
+    var low = [151, 83, 34];   // color of mag 1.0
+    var high = [5, 69, 54];  // color of mag 6.0 and above
+    var minMag = 1.0;
+    var maxMag = 30.0;
+    
+    for (var i = 0; i < results.features.length; i++) {
+      if (results.features[i].properties.Division == "Western") {
+      var coords = results.features[i].geometry.coordinates;
+      var latLng = new google.maps.LatLng(coords[1] + ((Math.floor(Math.random() * 500) - 250)/1000),
+        coords[0] + ((Math.floor(Math.random() * 500) - 250)/1000));  
+      var fraction = (Math.min(results.features[i].properties.count, maxMag) - minMag) / (maxMag - minMag);
+      var division = results.features[i].properties.Division;
+      var color = '#000066';
+      //var color = interpolateHsl(low, high, fraction);
+      
+      var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          strokeWeight: 0.5,
+          strokeColor: '#fff',
+          fillColor: color,
+          fillOpacity: 2 / results.features[i].properties.count,
+          scale: Math.pow(results.features[i].properties.count+1, 2)
+        },
+        zIndex: Math.floor(results.features[i].properties.count)
+      });
+
+      var contentString = '<center><b> Market: </b>' + results.features[i].properties.City + '<br><b> Programmer: </b>' + results.features[i].properties.Programmer + '<br><b>Corp/Sysprin:</b> ' + results.features[i].properties.corp_sysprin + '<br><b>Count:</b> ' +  results.features[i].properties.count + '</center>';
+      marker.info = new google.maps.InfoWindow({
+        content: contentString
+      })
+
+      google.maps.event.addListener(marker, 'mouseover', function() {
+          this.info.open(map, this);
+        });
+
+      google.maps.event.addListener(marker, 'mouseout', function() {
+          this.info.close();
+      });
+     
+      markers.push(marker);
+    }
+  }
+  }
+  });
+
+}
+
+function CentralControl(controlDiv, map) {
+
+  // Set CSS for the control border
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = '#009933';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Central Markets';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior
+  var controlText = document.createElement('div');
+  controlText.style.color = '#fff';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Central';
+  controlUI.appendChild(controlText);
+
+  google.maps.event.addDomListener(controlUI, 'click', function() {
+
+    map.setZoom(5);
+    map.setCenter({
+      lat: 33.7488,
+      lng: -84.387982
+    });
+    // Create a <script> tag and set the USGS URL as the source.
+    var script = document.createElement('script');
+    script.setAttribute('src','data.jsonp');
+    document.getElementsByTagName('head')[0].appendChild(script);
+
+    // Clear the map
+    setAllMap(null);
+    markers = [];
+    
+    // Loop through the results array and place a marker for each
+    // set of coordinates.
+    window.eqfeed_callback = function(results) {
+
+    var low = [151, 83, 34];   // color of mag 1.0
+    var high = [5, 69, 54];  // color of mag 6.0 and above
+    var minMag = 1.0;
+    var maxMag = 30.0;
+    
+    for (var i = 0; i < results.features.length; i++) {
+      if (results.features[i].properties.Division == "Central") {
+      var coords = results.features[i].geometry.coordinates;
+      var latLng = new google.maps.LatLng(coords[1] + ((Math.floor(Math.random() * 500) - 250)/1000),
+        coords[0] + ((Math.floor(Math.random() * 500) - 250)/1000)); 
+      var fraction = (Math.min(results.features[i].properties.count, maxMag) - minMag) / (maxMag - minMag);
+      var division = results.features[i].properties.Division;
+      var color = '#009933';
+      //var color = interpolateHsl(low, high, fraction);
+      
+      var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          strokeWeight: 0.5,
+          strokeColor: '#fff',
+          fillColor: color,
+          fillOpacity: 2 / results.features[i].properties.count,
+          scale: Math.pow(results.features[i].properties.count+1, 2)
+        },
+        zIndex: Math.floor(results.features[i].properties.count)
+      });
+
+      var contentString = '<center><b> Market: </b>' + results.features[i].properties.City + '<br><b> Programmer: </b>' + results.features[i].properties.Programmer + '<br><b>Corp/Sysprin:</b> ' + results.features[i].properties.corp_sysprin + '<br><b>Count:</b> ' +  results.features[i].properties.count + '</center>';
+      marker.info = new google.maps.InfoWindow({
+        content: contentString
+      })
+
+      google.maps.event.addListener(marker, 'mouseover', function() {
+          this.info.open(map, this);
+        });
+
+      google.maps.event.addListener(marker, 'mouseout', function() {
+          this.info.close();
+      });
+     
+      markers.push(marker);
+    }
+  }
+  }
+  });
+
+}
+
+function NEControl(controlDiv, map) {
+
+  // Set CSS for the control border
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = '#ff0000';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Northeast Markets';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior
+  var controlText = document.createElement('div');
+  controlText.style.color = '#fff';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Northeast';
+  controlUI.appendChild(controlText);
+
+  google.maps.event.addDomListener(controlUI, 'click', function() {
+
+    map.setZoom(6);
+    map.setCenter({
+      lat: 40.9522,
+      lng: -75.1642
+    });
+
+    // Create a <script> tag and set the USGS URL as the source.
+    var script = document.createElement('script');
+    script.setAttribute('src','data.jsonp');
+    document.getElementsByTagName('head')[0].appendChild(script);
+
+    // Clear the map
+    setAllMap(null);
+    markers = [];
+    
+    // Loop through the results array and place a marker for each
+    // set of coordinates.
+    window.eqfeed_callback = function(results) {
+
+    var low = [151, 83, 34];   // color of mag 1.0
+    var high = [5, 69, 54];  // color of mag 6.0 and above
+    var minMag = 1.0;
+    var maxMag = 30.0;
+    
+    for (var i = 0; i < results.features.length; i++) {
+      if (results.features[i].properties.Division == "Northeast") {
+      var coords = results.features[i].geometry.coordinates;
+      var latLng = new google.maps.LatLng(coords[1] + ((Math.floor(Math.random() * 500) - 250)/1000),
+        coords[0] + ((Math.floor(Math.random() * 500) - 250)/1000)); 
+      var fraction = (Math.min(results.features[i].properties.count, maxMag) - minMag) / (maxMag - minMag);
+      var division = results.features[i].properties.Division;
+      var color = '#ff0000';
+      //var color = interpolateHsl(low, high, fraction);
+      
+      var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          strokeWeight: 0.5,
+          strokeColor: '#fff',
+          fillColor: color,
+          fillOpacity: 2 / results.features[i].properties.count,
+          scale: Math.pow(results.features[i].properties.count+1, 2)
+        },
+        zIndex: Math.floor(results.features[i].properties.count)
+      });
+
+      var contentString = '<center><b> Market: </b>' + results.features[i].properties.City + '<br><b> Programmer: </b>' + results.features[i].properties.Programmer + '<br><b>Corp/Sysprin:</b> ' + results.features[i].properties.corp_sysprin + '<br><b>Count:</b> ' +  results.features[i].properties.count + '</center>';
+      marker.info = new google.maps.InfoWindow({
+        content: contentString
+      })
+
+      google.maps.event.addListener(marker, 'mouseover', function() {
+          this.info.open(map, this);
+        });
+
+      google.maps.event.addListener(marker, 'mouseout', function() {
+          this.info.close();
+      });
+     
+      markers.push(marker);
+    }
+  }
+  }
+  });
+
+}
+
+function GControl(controlDiv, map) {
+
+  // Set CSS for the control border
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = '#660066';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Northeast Markets';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior
+  var controlText = document.createElement('div');
+  controlText.style.color = '#fff';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Gaiam';
+  controlUI.appendChild(controlText);
+
+  google.maps.event.addDomListener(controlUI, 'click', function() {
+
+    // Create a <script> tag and set the USGS URL as the source.
+    var script = document.createElement('script');
+    script.setAttribute('src','data.jsonp');
+    document.getElementsByTagName('head')[0].appendChild(script);
+
+    // Clear the map
+    setAllMap(null);
+    markers = [];
+    
+    // Loop through the results array and place a marker for each
+    // set of coordinates.
+    window.eqfeed_callback = function(results) {
+
+    var low = [151, 83, 34];   // color of mag 1.0
+    var high = [5, 69, 54];  // color of mag 6.0 and above
+    var minMag = 1.0;
+    var maxMag = 30.0;
+    
+    for (var i = 0; i < results.features.length; i++) {
+      if (results.features[i].properties.Programmer == "Gaiam") {
+      var coords = results.features[i].geometry.coordinates;
+      var latLng = new google.maps.LatLng(coords[1] + ((Math.floor(Math.random() * 500) - 250)/1000),
+        coords[0] + ((Math.floor(Math.random() * 500) - 250)/1000));     
+      var fraction = (Math.min(results.features[i].properties.count, maxMag) - minMag) / (maxMag - minMag);
+      var division = results.features[i].properties.Division;
+      var color = '#660066';
+      //var color = interpolateHsl(low, high, fraction);
+      
+      var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          strokeWeight: 0.5,
+          strokeColor: '#fff',
+          fillColor: color,
+          fillOpacity: 2 / results.features[i].properties.count,
+          scale: Math.pow(results.features[i].properties.count+1, 2)
+        },
+        zIndex: Math.floor(results.features[i].properties.count)
+      });
+
+      var contentString = '<center><b> Market: </b>' + results.features[i].properties.City + '<br><b> Programmer: </b>' + results.features[i].properties.Programmer + '<br><b>Corp/Sysprin:</b> ' + results.features[i].properties.corp_sysprin + '<br><b>Count:</b> ' +  results.features[i].properties.count + '</center>';
+      marker.info = new google.maps.InfoWindow({
+        content: contentString
+      })
+
+      google.maps.event.addListener(marker, 'mouseover', function() {
+          this.info.open(map, this);
+        });
+
+      google.maps.event.addListener(marker, 'mouseout', function() {
+          this.info.close();
+      });
+     
+      markers.push(marker);
+    }
+  }
+  }
+  });
+
+}
+
+function CMControl(controlDiv, map) {
+
+  // Set CSS for the control border
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = '#FFFF00';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Cinemax';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior
+  var controlText = document.createElement('div');
+  controlText.style.color = '#fff';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Cinemax';
+  controlUI.appendChild(controlText);
+
+  google.maps.event.addDomListener(controlUI, 'click', function() {
+
+    // Create a <script> tag and set the USGS URL as the source.
+    var script = document.createElement('script');
+    script.setAttribute('src','data.jsonp');
+    document.getElementsByTagName('head')[0].appendChild(script);
+
+    // Clear the map
+    setAllMap(null);
+    markers = [];
+    
+    // Loop through the results array and place a marker for each
+    // set of coordinates.
+    window.eqfeed_callback = function(results) {
+
+    var low = [151, 83, 34];   // color of mag 1.0
+    var high = [5, 69, 54];  // color of mag 6.0 and above
+    var minMag = 1.0;
+    var maxMag = 30.0;
+    
+    for (var i = 0; i < results.features.length; i++) {
+      if (results.features[i].properties.Programmer == "Cinemax") {
+      var coords = results.features[i].geometry.coordinates;
+      var latLng = new google.maps.LatLng(coords[1] + ((Math.floor(Math.random() * 500) - 250)/1000),
+        coords[0] + ((Math.floor(Math.random() * 500) - 250)/1000));     
+      var fraction = (Math.min(results.features[i].properties.count, maxMag) - minMag) / (maxMag - minMag);
+      var division = results.features[i].properties.Division;
+      var color = '#FFFF00';
+      //var color = interpolateHsl(low, high, fraction);
+      
+      var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          strokeWeight: 0.5,
+          strokeColor: '#fff',
+          fillColor: color,
+          fillOpacity: 2 / results.features[i].properties.count,
+          scale: Math.pow(results.features[i].properties.count+1, 2)
+        },
+        zIndex: Math.floor(results.features[i].properties.count)
+      });
+
+      var contentString = '<center><b> Market: </b>' + results.features[i].properties.City + '<br><b> Programmer: </b>' + results.features[i].properties.Programmer + '<br><b>Corp/Sysprin:</b> ' + results.features[i].properties.corp_sysprin + '<br><b>Count:</b> ' +  results.features[i].properties.count + '</center>';
+      marker.info = new google.maps.InfoWindow({
+        content: contentString
+      })
+
+      google.maps.event.addListener(marker, 'mouseover', function() {
+          this.info.open(map, this);
+        });
+
+      google.maps.event.addListener(marker, 'mouseout', function() {
+          this.info.close();
+      });
+     
+      markers.push(marker);
+    }
+  }
+  }
+  });
+
+}
+
+function DisneyControl(controlDiv, map) {
+
+  // Set CSS for the control border
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = '#000';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Disney Family Movies SVOD (Orange); Disney XD (Purple); Disney Junior (Green)';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior
+  var controlText = document.createElement('div');
+  controlText.style.color = '#fff';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Disney';
+  controlUI.appendChild(controlText);
+
+  google.maps.event.addDomListener(controlUI, 'click', function() {
+
+    // Create a <script> tag and set the USGS URL as the source.
+    var script = document.createElement('script');
+    script.setAttribute('src','data.jsonp');
+    document.getElementsByTagName('head')[0].appendChild(script);
+
+    // Clear the map
+    setAllMap(null);
+    markers = [];
+    
+    // Loop through the results array and place a marker for each
+    // set of coordinates.
+    window.eqfeed_callback = function(results) {
+
+    var low = [151, 83, 34];   // color of mag 1.0
+    var high = [5, 69, 54];  // color of mag 6.0 and above
+    var minMag = 1.0;
+    var maxMag = 30.0;
+    
+    for (var i = 0; i < results.features.length; i++) {
+      var programmer = results.features[i].properties.Programmer;
+      if (programmer == "Disney Family Movies SVOD" ||
+        programmer == "Disney XD" ||
+        programmer == "Disney Junior") {
+      var coords = results.features[i].geometry.coordinates;
+      var latLng = new google.maps.LatLng(coords[1] + ((Math.floor(Math.random() * 500) - 250)/1000),
+        coords[0] + ((Math.floor(Math.random() * 500) - 250)/1000));
+      
+      var fraction = (Math.min(results.features[i].properties.count, maxMag) - minMag) / (maxMag - minMag);
+      var division = results.features[i].properties.Division;
+      var color;
+      if (programmer == "Disney Family Movies SVOD") {color = '#FF3300'}
+      else if (programmer == "Disney XD") {color = '#9966FF'}
+      else {color = '#00FF00'}
+      //var color = interpolateHsl(low, high, fraction);
+      
+      var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          strokeWeight: 0.5,
+          strokeColor: '#fff',
+          fillColor: color,
+          fillOpacity: 2 / results.features[i].properties.count,
+          scale: Math.pow(results.features[i].properties.count+1, 2)
+        },
+        zIndex: Math.floor(results.features[i].properties.count)
+      });
+
+      var contentString = '<center><b> Market: </b>' + results.features[i].properties.City + '<br><b> Programmer: </b>' + results.features[i].properties.Programmer + '<br><b>Corp/Sysprin:</b> ' + results.features[i].properties.corp_sysprin + '<br><b>Count:</b> ' +  results.features[i].properties.count + '</center>';
+      marker.info = new google.maps.InfoWindow({
+        content: contentString
+      })
+
+      google.maps.event.addListener(marker, 'mouseover', function() {
+          this.info.open(map, this);
+        });
+
+      google.maps.event.addListener(marker, 'mouseout', function() {
+          this.info.close();
+      });
+     
+      markers.push(marker);
+    }
+  }
+  }
+  });
+
+}
+
+function CenterControl(controlDiv, map) {
+    // Set CSS for the control border
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = '#fff';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior
+  var controlText = document.createElement('div');
+  controlText.style.color = 'rgb(25,25,25)';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Upsells Visualized: 6/8/2015, 12AM - 11:15AM';
+  controlUI.appendChild(controlText);
+}
+
+<!-- Marker styling functions -->
+function interpolateHsl(lowHsl, highHsl, fraction) {
+  var color = [];
+  for (var i = 0; i < 3; i++) {
+    // Calculate color based on the fraction.
+    color[i] = (highHsl[i] - lowHsl[i]) * fraction + lowHsl[i];
+  }
+
+  return 'hsl(' + color[0] + ',' + color[1] + '%,' + color[2] + '%)';
+}
+
+function setAllMap(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+</script>
+  </head>
+  <body id="map-container">
+    <div id="map-canvas"></div>
+  </body>
+</html>
